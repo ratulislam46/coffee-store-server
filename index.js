@@ -54,9 +54,23 @@ async function run() {
         // get data dynamicly in database 
         app.get('/coffees/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await coffeeCollection.findOne(query);
             res.send(result)
+        })
+
+
+        // update data dynamicly in database 
+        app.put('/coffees/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true };
+            const updatedCoffee = req.body;
+            const updateDoc = {
+                $set: updatedCoffee
+            }
+            const result = await coffeeCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
         })
 
 
